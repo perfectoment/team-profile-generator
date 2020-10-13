@@ -4,47 +4,49 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const util = require("util");
 
+const appendFileAsync = util.promisify(fs.appendFile)
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 const employeeArray = [];
 
-// function engineerQuestions(){
-  // return inquirer.prompt([
-  //   {
-  //       type: "input",
-  //       message: "What is their name?",
-  //       name: "name"
-  //     },
-  //     {
-  //       type: "input",
-  //       message: "What is their id?",
-  //       name: "id"
-  //     },
-  //     {
-  //       type: "input",
-  //       message: "What is their email address?",
-  //       name: "email"
-  //     },
-  //     {
-  //       type: "input",
-  //       message: "What is their Github profile?",
-  //       name: "github"
-  //     },
+function engineerQuestions(){
+  return inquirer.prompt([
+    {
+        type: "input",
+        message: "What is their name?",
+        name: "name"
+      },
+      {
+        type: "input",
+        message: "What is their id?",
+        name: "id"
+      },
+      {
+        type: "input",
+        message: "What is their email address?",
+        name: "email"
+      },
+      {
+        type: "input",
+        message: "What is their Github profile?",
+        name: "github"
+      },
      
-  //     ])
-  //     .then(function(data){
-  //       Manager = data.role.choices[0];
-  //       Engineer = data.role.choices[1];
-  //       Intern = data.role.choices[2];
-  //     }
-  //     )
-  //     .catch(function (error){
-  //       console.log(error)
-  //     })
-// }
+      ])
+      .then(function(data){
+       const engineer = new Engineer(data.name, data.id, data.email, data.github);
+       employeeArray.push(engineer);
+       firstQuestion();
+      }
+      )
+      .catch(function (error){
+        console.log(error)
+      })
+}
 
  function internQuestions(){
   return inquirer.prompt([
@@ -71,7 +73,10 @@ const employeeArray = [];
     
       ])
       .then(function(data){
-       
+       const intern = new Intern(data.name, data.id, data.email, data.school);
+       employeeArray.push(intern);
+       firstQuestion();
+
       }
       )
  }
@@ -99,10 +104,9 @@ const employeeArray = [];
    },
      
   ]).then(function(data){
-      const manager = new Manager(data.name, data.id, data.email, data.officeNumber)
-      employeeArray.push(manager)
-      console.log(render(employeeArray))
-      // firstQuestion();
+      const manager = new Manager(data.name, data.id, data.email, data.officeNumber);
+      employeeArray.push(manager);
+      firstQuestion();
       })
        
 }
@@ -111,7 +115,7 @@ function firstQuestion(){
   return inquirer.prompt([
     {
       type: "list",
-      message: "What is thier role?",
+      message: "What is their role?",
       name: "role",
       choices:["Manager", "Engineer", "Intern", "Quit"]
     },
@@ -120,12 +124,22 @@ function firstQuestion(){
       if(data.role === "Manager"){
         managerQuestions();
       }
+      if(data.role === "Intern"){
+        internQuestions();
+      }
+      if(data.role === "Engineer"){
+        engineerQuestions();
+      }
+      if(data.role === "Quit"){
+        appendFileAsync("./output/team.html", render(employeeArray), "utf8");
+        
+      }
     })
   }   
 
-firstQuestion().then(response =>{
-  render(employeeArray);
-});
+firstQuestion();
+
+
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
