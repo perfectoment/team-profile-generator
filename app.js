@@ -115,7 +115,7 @@ function firstQuestion(){
   return inquirer.prompt([
     {
       type: "list",
-      message: "What is their role?",
+      message: "What is your employee's role?",
       name: "role",
       choices:["Manager", "Engineer", "Intern", "Quit"]
     },
