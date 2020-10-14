@@ -37,12 +37,12 @@ I created a team profile generator that allows you, when prompting node.js, to c
 * [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML)
 * [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
 * [Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-* [Node.js]
-* [Inquirer.js]
+* [Node.js](https://nodejs.org/en/)
+* [Inquirer.js](https://www.npmjs.com/package/inquirer)
 
 ## Deployed Link
 
-* [See video if it in action](https://perfectoment.github.io/weather-dashboard/)
+* [See video of it in action!](https://youtu.be/GAj4hFmotgs)
 
 
 ## Author
